@@ -69,10 +69,6 @@ Have fun!
 
 ## Have some Ideas or Feedback?
 
-And as always, thanks so much for your support and letting us do what
-we love!
-
 If you have suggestions or questions, please feel free to
-open an issue or message us.
+open an issue or message on [https://knpuniversity.com](https://knpuniversity.com).
 
-<3 Your friends at KnpUniversity
