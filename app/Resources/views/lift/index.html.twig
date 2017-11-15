@@ -68,9 +68,19 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        $(document).ready(function () {
-            let $table = $('.js-rep-log-table');
-            $table.find('.js-delete-rep-log').on('click', function (e) {
+        let RepLogApp = {
+            initialize: function ($wrapper) {
+                this.$wrapper = $wrapper;
+                this.$wrapper.find('.js-delete-rep-log').on(
+                    'click',
+                    this.handleRepLogDelete
+                );
+                this.$wrapper.find('tbody tr').on(
+                    'click',
+                    this.handleRowClick
+                );
+            },
+            handleRepLogDelete: function (e) {
                 e.preventDefault();
                 $(this).addClass('text-danger');
                 $(this).find('.fa')
@@ -79,7 +89,7 @@
                     .addClass('fa-spin');
                 let deleteUrl = $(this).data('url');
                 let $row = $(this).closest('tr');
-                let $totalWeightContainer = $table.find('.js-total-weight');
+                let $totalWeightContainer = this.$wrapper.find('.js-total-weight');
                 let newWeight = $totalWeightContainer.html() - $row.data('weight')
                 $.ajax({
                     url: deleteUrl,
@@ -89,12 +99,14 @@
                         $totalWeightContainer.html(newWeight);
                     }
                 });
-                console.log(e.currentTarget);
-                console.log(e.currentTarget === this);
-            });
-            $table.find('tbody tr').on('click', function () {
+            },
+            handleRowClick: function () {
                 console.log('row clicked!');
-            });
+            }
+        };
+        $(document).ready(function () {
+            let $table = $('.js-rep-log-table');
+            RepLogApp.initialize($table);
         });
     </script>
 {% endblock %}
