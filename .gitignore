@@ -14,5 +14,6 @@
 !var/SymfonyRequirements.php
 /vendor/
 /_tuts/
+.idea/
 /knpu/
 /web/bundles/
