@@ -13,4 +13,6 @@
 !var/sessions/.gitkeep
 !var/SymfonyRequirements.php
 /vendor/
+/_tuts/
+/knpu/
 /web/bundles/
