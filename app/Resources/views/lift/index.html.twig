@@ -70,6 +70,7 @@
     <script>
         let RepLogApp = {
             initialize: function ($wrapper) {
+                this.whatIsThis('Hello');
                 this.$wrapper = $wrapper;
                 this.$wrapper.find('.js-delete-rep-log').on(
                     'click',
@@ -79,7 +80,21 @@
                     'click',
                     this.handleRowClick
                 );
+                var newThis = {
+                    cat: 'meow',
+                    dog: 'woof'
+                }
+                this.whatIsThis.call(newThis, 'Hello');
             },
+
+            updateTotalWeightLifted: function() {
+                let totalWeight = 0;
+                this.$wrapper.find('tbody tr').each(function() {
+                    totalWeight += $(this).data('weight');
+                });
+                this.$wrapper.find('.js-total-weight').html(totalWeight);
+            },
+
             handleRepLogDelete: function (e) {
                 e.preventDefault();
                 $(this).addClass('text-danger');
@@ -89,17 +104,22 @@
                     .addClass('fa-spin');
                 let deleteUrl = $(this).data('url');
                 let $row = $(this).closest('tr');
-                let $totalWeightContainer = this.$wrapper.find('.js-total-weight');
-                let newWeight = $totalWeightContainer.html() - $row.data('weight')
                 $.ajax({
                     url: deleteUrl,
                     method: 'DELETE',
-                    success: function () {
-                        $row.fadeOut();
-                        $totalWeightContainer.html(newWeight);
+                    success: function() {
+                        $row.fadeOut('normal', function () {
+                            $row.remove();
+                            RepLogApp.updateTotalWeightLifted();
+                        });
                     }
                 });
             },
+
+            whatIsThis: function (greeting) {
+                console.log(this, greeting);
+            },
+
             handleRowClick: function () {
                 console.log('row clicked!');
             }
