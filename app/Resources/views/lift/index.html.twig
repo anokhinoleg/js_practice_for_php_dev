@@ -2,7 +2,7 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-7 js-rep-log-table">
             <h2>
                 Lift History
                 <a href="#list-stuff-form" class="btn btn-md btn-success pull-right">
@@ -10,7 +10,7 @@
                 </a>
             </h2>
 
-            <table class="table table-striped js-rep-log-table">
+            <table class="table table-striped">
                 <thead>
                 <tr>
                     <th>What</th>
@@ -70,8 +70,8 @@
     <script src="{{ asset('assets/js/RepLogApp.js') }}"></script>
     <script>
         $(document).ready(function () {
-            let $table = $('.js-rep-log-table');
-            RepLogApp.initialize($table);
+            let $wrapper = $('.js-rep-log-table');
+            let repLogApp = new RepLogApp($wrapper);
         });
     </script>
 {% endblock %}

@@ -1,38 +1,26 @@
 (function (window, $) {
     'use strict';
-    window.RepLogApp = {
-        initialize: function ($wrapper) {
-            this.$wrapper = $wrapper;
-            this.helper = new Helper(this.$wrapper);
-            console.log(this.helper, Object.keys(this.helper));
 
-            console.log(Helper, Object.keys(Helper));
-            console.log(this.helper.calculateTotalWeight());
-            let playObject = {
-                lift: 'stuff'
-            };
-            playObject.__proto__.cat = 'meow';
-            console.log(playObject.lift, playObject.cat);
-            console.log(
-                'foo'.__proto__,
-                [].__proto__,
-                (new Date()).__proto__
-            );
-            let helper2 = new Helper($('.footer'));
-            console.log(
-                this.helper.calculateTotalWeight(),
-                helper2.calculateTotalWeight()
-            );
-            this.$wrapper.find('.js-delete-rep-log').on(
-                'click',
-                this.handleRepLogDelete.bind(this)
-            );
-            this.$wrapper.find('tbody tr').on(
-                'click',
-                this.handleRowClick.bind(this)
-            );
-        },
+    window.RepLogApp = function ($wrapper) {
+        this.$wrapper = $wrapper;
+        this.helper = new Helper(this.$wrapper);
 
+        this.$wrapper.find('.js-delete-rep-log').on(
+            'click',
+            this.handleRepLogDelete.bind(this)
+        );
+        this.$wrapper.find('tbody tr').on(
+            'click',
+            this.handleRowClick.bind(this)
+        );
+
+        this.$wrapper.find('.js-new-rep-log-form').on(
+            'click',
+            this.handleNewFormSubmit.bind(this)
+        );
+    };
+
+    $.extend(RepLogApp.prototype, {
         updateTotalWeightLifted: function() {
             this.$wrapper.find('.js-total-weight').html(
                 this.helper.calculateTotalWeight()
@@ -62,10 +50,21 @@
             });
         },
 
+        handleNewFormSubmit: function (e) {
+            e.preventDefault();
+            let $form = $(e.currentTarget);
+            $.ajax({
+                url: $form.attr('action'),
+                method: 'POST',
+                data: $form.serialize()
+            });
+            console.log('submitted!');
+        },
+
         handleRowClick: function () {
             console.log('row clicked!');
         }
-    };
+    });
 
     /**
      *
@@ -74,15 +73,15 @@
     let Helper = function ($wrapper) {
         this.$wrapper = $wrapper;
     };
-    Helper.initialize = function ($wrapper) {
-        this.$wrapper = $wrapper;
-    };
-    Helper.prototype.calculateTotalWeight = function () {
-        let totalWeight = 0;
-        this.$wrapper.find('tbody tr').each(function() {
-            totalWeight += $(this).data('weight');
-        });
-        return totalWeight;
-    }
+
+    $.extend(Helper.prototype, {
+        calculateTotalWeight: function () {
+            let totalWeight = 0;
+            this.$wrapper.find('tbody tr').each(function() {
+                totalWeight += $(this).data('weight');
+            });
+            return totalWeight;
+        }
+    });
 })(window, jQuery);
 
