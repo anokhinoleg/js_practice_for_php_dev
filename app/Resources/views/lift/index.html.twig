@@ -1,5 +1,4 @@
 {% extends 'base.html.twig' %}
-
 {% block body %}
     <div class="row">
         <div class="col-md-7 js-rep-log-table">
@@ -9,7 +8,6 @@
                     <span class="fa fa-plus"></span> Add
                 </a>
             </h2>
-
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -26,8 +24,9 @@
                         <td>{{ repLog.reps }}</td>
                         <td>{{ repLog.totalWeightLifted }}</td>
                         <td>
-                            &nbsp;<a href="#" class="js-delete-rep-log"
-                                data-url="{{ path('rep_log_delete', {'id' : repLog.id}) }}"
+                            <a href="#"
+                               class="js-delete-rep-log"
+                               data-url="{{ path('rep_log_delete', {id: repLog.id}) }}"
                             >
                                 <span class="fa fa-trash"></span>
                             </a>
@@ -40,38 +39,33 @@
                 {% endfor %}
                 </tbody>
                 <tfoot>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <th>Total</th>
-                        <th class="js-total-weight">{{ totalWeight }}</th>
-                        <td>&nbsp;</td>
-                    </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <th>Total</th>
+                    <th class="js-total-weight">{{ totalWeight }}</th>
+                    <td>&nbsp;</td>
+                </tr>
                 </tfoot>
             </table>
-
-            {{ include('lift/_form.html.twig') }}
-
+            <div class="js-new-rep-log-form-wrapper">
+                {{ include('lift/_form.html.twig') }}
+            </div>
         </div>
         <div class="col-md-5">
             <div class="leaderboard">
-                <h2 class="text-center">
-                    <img class="dumbbell" src="{{ asset('assets/images/dumbbell.png') }}" />
-                    Leaderboard
-                </h2>
-
+                <h2 class="text-center"><img class="dumbbell" src="{{ asset('assets/images/dumbbell.png') }}">Leaderboard</h2>
                 {{ include('lift/_leaderboard.html.twig') }}
             </div>
         </div>
     </div>
 {% endblock %}
-
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('assets/js/RepLogApp.js') }}"></script>
     <script>
-        $(document).ready(function () {
-            let $wrapper = $('.js-rep-log-table');
-            let repLogApp = new RepLogApp($wrapper);
+        $(document).ready(function() {
+            var $wrapper = $('.js-rep-log-table');
+            var repLogApp = new RepLogApp($wrapper);
         });
     </script>
 {% endblock %}
