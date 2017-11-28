@@ -28,4 +28,9 @@ class RepLogType extends AbstractType
             'data_class' => RepLog::class
         ));
     }
+
+    public function getBlockPrefix()
+    {
+        return '';
+    }
 } 
