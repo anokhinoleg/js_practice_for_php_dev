@@ -1,8 +1,9 @@
 'use strict';
-(function(window, $) {
+(function(window, $, Routing) {
     window.RepLogApp = function ($wrapper) {
         this.$wrapper = $wrapper;
         this.helper = new Helper(this.$wrapper);
+        this.loadRepLogs();
         this.$wrapper.on(
             'click',
             '.js-delete-rep-log',
@@ -18,11 +19,25 @@
             this._selectors.newRepForm,
             this.handleNewFormSubmit.bind(this)
         );
+
     };
 
     $.extend(window.RepLogApp.prototype, {
         _selectors: {
             newRepForm: '.js-new-rep-log-form'
+        },
+
+        loadRepLogs: function () {
+            let self = this;
+            $.ajax({
+                url: Routing.generate('rep_log_list'),
+                success: function (data) {
+                    console.log(data);
+                    $.each(data.items, function (key, repLog) {
+                        self._addRow(repLog);
+                    });
+                }
+            });
         },
 
         _addRow: function (repLog) {
@@ -136,4 +151,4 @@
             return totalWeight;
         }
     });
-})(window, jQuery);
+})(window, jQuery, Routing);
