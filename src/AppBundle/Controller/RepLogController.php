@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Api\RepLogApiModel;
 use AppBundle\Entity\RepLog;
 use AppBundle\Form\Type\RepLogType;
+use const null;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
@@ -89,7 +90,9 @@ class RepLogController extends BaseController
 
         $apiModel = $this->createRepLogApiModel($repLog);
 
-        $response = $this->createApiResponse($apiModel);
+//        $response = $this->createApiResponse($apiModel);
+
+        $response = new Response(null, 204);
         // setting the Location header... it's a best-practice
         $response->headers->set(
             'Location',
