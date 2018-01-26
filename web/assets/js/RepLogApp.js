@@ -1,5 +1,5 @@
 'use strict';
-(function(window, $, Routing) {
+(function(window, $, Routing, swal) {
     window.RepLogApp = function ($wrapper) {
         this.$wrapper = $wrapper;
         this.helper = new Helper(this.$wrapper);
@@ -67,6 +67,26 @@
             this.updateTotalWeightLifted();
         },
 
+        _deleteRepLog: function ($link) {
+            $link.addClass('text-danger');
+            $link.find('.fa')
+                .removeClass('fa-trash')
+                .addClass('fa-spinner')
+                .addClass('fa-spin');
+            let deleteUrl = $link.data('url');
+            let $row = $link.closest('tr');
+            let self = this;
+            return $.ajax({
+                url: deleteUrl,
+                method: 'DELETE'
+            }).then(function () {
+                $row.fadeOut('normal', function () {
+                    $(this).remove();
+                    self.updateTotalWeightLifted();
+                });
+            });
+        },
+
         updateTotalWeightLifted: function () {
             this.$wrapper.find('.js-total-weight').html(
                 this.helper.calculateTotalWeight()
@@ -76,22 +96,20 @@
         handleRepLogDelete: function (e) {
             e.preventDefault();
             let $link = $(e.currentTarget);
-            $link.addClass('text-danger');
-            $link.find('.fa')
-                .removeClass('fa-trash')
-                .addClass('fa-spinner')
-                .addClass('fa-spin');
-            let deleteUrl = $link.data('url');
-            let $row = $link.closest('tr');
             let self = this;
-            $.ajax({
-                url: deleteUrl,
-                method: 'DELETE'
-            }).then(function () {
-                $row.fadeOut('normal', function () {
-                    $(this).remove();
-                    self.updateTotalWeightLifted();
-                });
+            swal({
+                title: 'Are you sure?',
+                text: 'You will not be able to recover this imaginary file!',
+                type: 'warning',
+                showCancelButton: true,
+                showLoaderOnConfirm: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, keep it',
+                preConfirm: () => {
+                    return self._deleteRepLog($link);
+                }
+            }).catch(() => {
+                console.log('cancel');
             });
         },
 
@@ -162,4 +180,4 @@
             return totalWeight;
         }
     });
-})(window, jQuery, Routing);
+})(window, jQuery, Routing, swal);
