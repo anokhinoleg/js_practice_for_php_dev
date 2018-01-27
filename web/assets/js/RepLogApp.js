@@ -32,7 +32,7 @@
             $.ajax({
                 url: Routing.generate('rep_log_list')
             }).then(function (data) {
-                console.log(data);
+                //console.log(data);
                 $.each(data.items, function (key, repLog) {
                     self._addRow(repLog);
                 });
