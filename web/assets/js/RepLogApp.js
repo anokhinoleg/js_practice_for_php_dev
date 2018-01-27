@@ -63,7 +63,6 @@
             let tpl = _.template(tplText);
             let html = tpl(repLog);
             this.$wrapper.find('tbody').append($.parseHTML(html));
-            // console.log(repLog);
             this.updateTotalWeightLifted();
         },
 
