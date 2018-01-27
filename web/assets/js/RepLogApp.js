@@ -38,7 +38,7 @@
                 });
             });
         },
-
+        
         _saveRepLog: function (data) {
             return new Promise(function (resolve, reject) {
                 $.ajax({
