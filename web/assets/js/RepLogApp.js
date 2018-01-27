@@ -26,7 +26,7 @@
         _selectors: {
             newRepForm: '.js-new-rep-log-form'
         },
-
+    
         loadRepLogs: function () {
             let self = this;
             $.ajax({
