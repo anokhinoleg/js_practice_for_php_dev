@@ -31,7 +31,6 @@
             $.ajax({
                 url: Routing.generate('rep_log_list')
             }).then((data) => {
-                //console.log(data);
                 $.each(data.items, (key, repLog) => {
                     this._addRow(repLog);
                 });
@@ -51,16 +50,16 @@
                         resolve(data)
                     });
                 }).catch((jqXHR) => {
-                    let errorData = JSON.parse(jqXHR.responseText);
+                    const errorData = JSON.parse(jqXHR.responseText);
                     reject(errorData);
                 });
             });
         },
 
         _addRow: function (repLog) {
-            let tplText = $('#js-rep-log-row-template').html();
-            let tpl = _.template(tplText);
-            let html = tpl(repLog);
+            const tplText = $('#js-rep-log-row-template').html();
+            const tpl = _.template(tplText);
+            const html = tpl(repLog);
             this.$wrapper.find('tbody').append($.parseHTML(html));
             this.updateTotalWeightLifted();
         },
@@ -71,8 +70,8 @@
                 .removeClass('fa-trash')
                 .addClass('fa-spinner')
                 .addClass('fa-spin');
-            let deleteUrl = $link.data('url');
-            let $row = $link.closest('tr');
+            const deleteUrl = $link.data('url');
+            const $row = $link.closest('tr');
             return $.ajax({
                 url: deleteUrl,
                 method: 'DELETE'
@@ -92,7 +91,7 @@
 
         handleRepLogDelete: function (e) {
             e.preventDefault();
-            let $link = $(e.currentTarget);
+            const $link = $(e.currentTarget);
             swal({
                 title: 'Are you sure?',
                 text: 'You will not be able to recover this imaginary file!',
@@ -115,8 +114,8 @@
 
         handleNewFormSubmit: function(e) {
             e.preventDefault();
-            let $form = $(e.currentTarget);
-            let formData = {};
+            const $form = $(e.currentTarget);
+            const formData = {};
             $.each($form.serializeArray(), (key, fieldData) => {
                 formData[fieldData.name] = fieldData.value;
             });
@@ -131,28 +130,28 @@
 
         _clearForm: function () {
             this._removeFormErrors();
-            let $form = this.$wrapper.find(this._selectors.newRepForm);
+            const $form = this.$wrapper.find(this._selectors.newRepForm);
             $form[0].reset();
         },
 
         _removeFormErrors: function () {
-            let $form = this.$wrapper.find(this._selectors.newRepForm);
+            const $form = this.$wrapper.find(this._selectors.newRepForm);
             $form.find('.js-field-error').remove();
             $form.find('.form-group').removeClass('has-error');
         },
 
         _mapErrorsToForm: function(errorData) {
             // reset things!
-            let $form = this.$wrapper.find(this._selectors.newRepForm);
+            const $form = this.$wrapper.find(this._selectors.newRepForm);
             this._removeFormErrors();
             $form.find(':input').each((index, element) => {
-                let fieldName = $(element).attr('name');
-                let $wrapper = $(element).closest('.form-group');
+                const fieldName = $(element).attr('name');
+                const $wrapper = $(element).closest('.form-group');
                 if (!errorData[fieldName]) {
                     // no error!
                     return;
                 }
-                let $error = $('<span class="js-field-error help-block"></span>');
+                const $error = $('<span class="js-field-error help-block"></span>');
                 $error.html(errorData[fieldName]);
                 $wrapper.append($error);
                 $wrapper.addClass('has-error');
@@ -163,7 +162,7 @@
     /**
      * A "private" object
      */
-    let Helper = function ($wrapper) {
+    const Helper = function ($wrapper) {
         this.$wrapper = $wrapper;
     };
     $.extend(Helper.prototype, {
@@ -172,6 +171,7 @@
             this.$wrapper.find('tbody tr').each((index, element) => {
                 totalWeight += $(element).data('weight');
             });
+            console.log(totalWeight);
             return totalWeight;
         }
     });
