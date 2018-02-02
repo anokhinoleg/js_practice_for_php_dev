@@ -1,33 +1,34 @@
 'use strict';
 (function(window, $, Routing, swal) {
-    window.RepLogApp = function ($wrapper) {
-        this.$wrapper = $wrapper;
-        this.helper = new Helper(this.$wrapper);
-        this.loadRepLogs();
-        this.$wrapper.on(
-            'click',
-            '.js-delete-rep-log',
-            this.handleRepLogDelete.bind(this)
-        );
-        this.$wrapper.on(
-            'click',
-            'tbody tr',
-            this.handleRowClick.bind(this)
-        );
-        this.$wrapper.on(
-            'submit',
-            this._selectors.newRepForm,
-            this.handleNewFormSubmit.bind(this)
-        );
+    class RepLogApp {
+        constructor($wrapper) {
+            this.$wrapper = $wrapper;
+            this.helper = new Helper(this.$wrapper);
+            this.loadRepLogs();
+            this.$wrapper.on(
+                'click',
+                '.js-delete-rep-log',
+                this.handleRepLogDelete.bind(this)
+            );
+            this.$wrapper.on(
+                'click',
+                'tbody tr',
+                this.handleRowClick.bind(this)
+            );
+            this.$wrapper.on(
+                'submit',
+                RepLogApp._selectors.newRepForm,
+                this.handleNewFormSubmit.bind(this)
+            );
+        }
 
-    };
+        static get _selectors() {
+            return {
+                newRepForm: '.js-new-rep-log-form'
+            };
+        }
 
-    $.extend(window.RepLogApp.prototype, {
-        _selectors: {
-            newRepForm: '.js-new-rep-log-form'
-        },
-
-        loadRepLogs: function() {
+        loadRepLogs() {
             $.ajax({
                 url: Routing.generate('rep_log_list')
             }).then((data) => {
@@ -35,12 +36,13 @@
                     this._addRow(repLog);
                 });
             });
-        },
+        }
 
-        _saveRepLog: function (data) {
+        _saveRepLog(data) {
             return new Promise((resolve, reject) => {
+                const url = Routing.generate('rep_log_new');
                 $.ajax({
-                    url: Routing.generate('rep_log_new'),
+                    url,
                     method: 'POST',
                     data: JSON.stringify(data)
                 }).then((data, textStatus, jqXHR) => {
@@ -54,17 +56,17 @@
                     reject(errorData);
                 });
             });
-        },
+        }
 
-        _addRow: function (repLog) {
+        _addRow(repLog) {
             const tplText = $('#js-rep-log-row-template').html();
             const tpl = _.template(tplText);
             const html = tpl(repLog);
             this.$wrapper.find('tbody').append($.parseHTML(html));
             this.updateTotalWeightLifted();
-        },
+        }
 
-        _deleteRepLog: function ($link) {
+        _deleteRepLog($link) {
             $link.addClass('text-danger');
             $link.find('.fa')
                 .removeClass('fa-trash')
@@ -81,15 +83,15 @@
                     this.updateTotalWeightLifted();
                 });
             });
-        },
+        }
 
-        updateTotalWeightLifted: function () {
+        updateTotalWeightLifted() {
             this.$wrapper.find('.js-total-weight').html(
-                this.helper.calculateTotalWeight()
+                this.helper.getTotalWeightString()
             );
-        },
+        }
 
-        handleRepLogDelete: function (e) {
+        handleRepLogDelete(e) {
             e.preventDefault();
             const $link = $(e.currentTarget);
             swal({
@@ -106,13 +108,13 @@
             }).catch((arg) => {
                 console.log('cancel');
             });
-        },
+        }
 
-        handleRowClick: function () {
+        handleRowClick() {
             console.log('row clicked!');
-        },
+        }
 
-        handleNewFormSubmit: function(e) {
+        handleNewFormSubmit(e) {
             e.preventDefault();
             const $form = $(e.currentTarget);
             const formData = {};
@@ -126,23 +128,23 @@
             }).catch((errorData) => {
                 this._mapErrorsToForm(errorData.errors);
             });
-        },
+        }
 
-        _clearForm: function () {
+        _clearForm() {
             this._removeFormErrors();
-            const $form = this.$wrapper.find(this._selectors.newRepForm);
+            const $form = this.$wrapper.find(RepLogApp._selectors.newRepForm);
             $form[0].reset();
-        },
+        }
 
-        _removeFormErrors: function () {
-            const $form = this.$wrapper.find(this._selectors.newRepForm);
+        _removeFormErrors() {
+            const $form = this.$wrapper.find(RepLogApp._selectors.newRepForm);
             $form.find('.js-field-error').remove();
             $form.find('.form-group').removeClass('has-error');
-        },
+        }
 
-        _mapErrorsToForm: function(errorData) {
+        _mapErrorsToForm(errorData) {
             // reset things!
-            const $form = this.$wrapper.find(this._selectors.newRepForm);
+            const $form = this.$wrapper.find(RepLogApp._selectors.newRepForm);
             this._removeFormErrors();
             $form.find(':input').each((index, element) => {
                 const fieldName = $(element).attr('name');
@@ -157,22 +159,34 @@
                 $wrapper.addClass('has-error');
             });
         }
-    });
+    }
 
-    /**
-     * A "private" object
-     */
-    const Helper = function ($wrapper) {
-        this.$wrapper = $wrapper;
-    };
-    $.extend(Helper.prototype, {
-        calculateTotalWeight: function() {
+    class Helper {
+        constructor($wrapper) {
+            this.$wrapper = $wrapper;
+        }
+
+        calculateTotalWeight() {
+            return Helper._calculateTotalWeight(
+                this.$wrapper.find('tbody tr')
+            );
+        }
+
+        getTotalWeightString(maxWeight = 500) {
+            let weight = this.calculateTotalWeight();
+            return maxWeight < weight ? maxWeight + '+' + " lbs" : weight + " lbs";
+        }
+
+        static _calculateTotalWeight($elements) {
             let totalWeight = 0;
-            this.$wrapper.find('tbody tr').each((index, element) => {
+            $elements.each((index, element) => {
                 totalWeight += $(element).data('weight');
             });
             console.log(totalWeight);
             return totalWeight;
         }
-    });
+    }
+
+    window.RepLogApp = RepLogApp;
+
 })(window, jQuery, Routing, swal);

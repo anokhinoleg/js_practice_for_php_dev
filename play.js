@@ -1,7 +1,24 @@
-let greatNumber = 10;
+class AGreatClass {
+    constructor(greatNumber) {
+        this.greatNumber = greatNumber;
+    }
 
-setTimeout(() => {
-    console.log(greatNumber);
-}, 1000);
+    getGreatNumber() {
+        return this.greatNumber;
+    }
+}
 
-console.log('waiting...');
+class AnotherAGreatClass extends AGreatClass {
+    constructor(greatWord, greatNumber) {
+        super(greatNumber);
+        this.greatWord = greatWord;
+    }
+    getGreatNumber() {
+        let AGreatNumber = super.getGreatNumber();
+        return [this.greatWord, AGreatNumber];
+    }
+}
+
+
+const AGreatObject = new AnotherAGreatClass('adventure',42);
+console.log(AGreatObject.getGreatNumber());
