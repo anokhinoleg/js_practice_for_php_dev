@@ -1,24 +1,23 @@
-class AGreatClass {
-    constructor(greatNumber) {
-        this.greatNumber = greatNumber;
-    }
+let printThreeThings = function (thing1,thing2,thing3) {
+    console.log(thing1,thing2,thing3);
+};
 
-    getGreatNumber() {
-        return this.greatNumber;
-    }
-}
+let yammyThings = ['pizza', 'gelato', 'sushi'];
 
-class AnotherAGreatClass extends AGreatClass {
-    constructor(greatWord, greatNumber) {
-        super(greatNumber);
-        this.greatWord = greatWord;
-    }
-    getGreatNumber() {
-        let AGreatNumber = super.getGreatNumber();
-        return [this.greatWord, AGreatNumber];
-    }
-}
+printThreeThings(...yammyThings);
 
+let arr1 = [1, 2, 3, 4, ...yammyThings, 5];
 
-const AGreatObject = new AnotherAGreatClass('adventure',42);
-console.log(AGreatObject.getGreatNumber());
+console.log(arr1);
+let trulycopyarr1 = [...arr1];
+
+console.log(trulycopyarr1);
+console.log(arr1);
+
+let copyarr1 = arr1;
+
+copyarr1.push(6);
+
+console.log(copyarr1);
+console.log(arr1);
+

@@ -32,9 +32,9 @@
             $.ajax({
                 url: Routing.generate('rep_log_list')
             }).then((data) => {
-                $.each(data.items, (key, repLog) => {
+                for (let repLog of data.items) {
                     this._addRow(repLog);
-                });
+                }
             });
         }
 
@@ -59,6 +59,9 @@
         }
 
         _addRow(repLog) {
+            /*Destructuring*/
+            /*let {id, itemLabel, reps} = repLog;
+            console.log(id, itemLabel, reps);*/
             const tplText = $('#js-rep-log-row-template').html();
             const tpl = _.template(tplText);
             const html = tpl(repLog);
@@ -118,9 +121,10 @@
             e.preventDefault();
             const $form = $(e.currentTarget);
             const formData = {};
-            $.each($form.serializeArray(), (key, fieldData) => {
+            console.log($form, $form.serializeArray());
+            for (let fieldData of $form.serializeArray()){
                 formData[fieldData.name] = fieldData.value;
-            });
+            }
             this._saveRepLog(formData)
             .then((data) => {
                 this._clearForm();
@@ -182,7 +186,6 @@
             $elements.each((index, element) => {
                 totalWeight += $(element).data('weight');
             });
-            console.log(totalWeight);
             return totalWeight;
         }
     }
