@@ -1,9 +1,11 @@
 'use strict';
 (function(window, $, Routing, swal) {
+    let HelperInstance = new WeakMap();
     class RepLogApp {
         constructor($wrapper) {
             this.$wrapper = $wrapper;
-            this.helper = new Helper(this.$wrapper);
+            this.repLogs = [];
+            HelperInstance.set(this, new Helper(this.repLogs));
             this.loadRepLogs();
             this.$wrapper.on(
                 'click',
@@ -59,11 +61,14 @@
         }
 
         _addRow(repLog) {
+            this.repLogs.push(repLog);
             /*Destructuring*/
             /*let {id, itemLabel, reps} = repLog;
             console.log(id, itemLabel, reps);*/
             const html = rowTemplate(repLog);
-            this.$wrapper.find('tbody').append($.parseHTML(html));
+            const $row = $($.parseHTML(html));
+            $row.data('key', this.repLogs.length - 1);
+            this.$wrapper.find('tbody').append($row);
             this.updateTotalWeightLifted();
         }
 
@@ -80,6 +85,10 @@
                 method: 'DELETE'
             }).then(() => {
                 $row.fadeOut('normal', () => {
+                    this.repLogs.splice(
+                        $row.data('key'),
+                        1
+                    );
                     $row.remove();
                     this.updateTotalWeightLifted();
                 });
@@ -88,7 +97,7 @@
 
         updateTotalWeightLifted() {
             this.$wrapper.find('.js-total-weight').html(
-                this.helper.getTotalWeightString()
+                HelperInstance.get(this).getTotalWeightString()
             );
         }
 
@@ -164,13 +173,13 @@
     }
 
     class Helper {
-        constructor($wrapper) {
-            this.$wrapper = $wrapper;
+        constructor(repLogs) {
+            this.repLogs = repLogs;
         }
 
         calculateTotalWeight() {
             return Helper._calculateTotalWeight(
-                this.$wrapper.find('tbody tr')
+                this.repLogs
             );
         }
 
@@ -179,11 +188,11 @@
             return maxWeight < weight ? maxWeight + '+' + " lbs" : weight + " lbs";
         }
 
-        static _calculateTotalWeight($elements) {
+        static _calculateTotalWeight(repLogs) {
             let totalWeight = 0;
-            $elements.each((index, element) => {
-                totalWeight += $(element).data('weight');
-            });
+            for (let repLog of repLogs) {
+                totalWeight += repLog.totalWeightLifted;
+            }
             return totalWeight;
         }
     }
