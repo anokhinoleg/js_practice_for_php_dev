@@ -1,0 +1,12 @@
+{
+  "name": "js_practice_for_php_dev",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:anokhinoleg/js_practice_for_php_dev.git",
+  "author": "Oleg Anokhin <olegyurievich1991@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1"
+  }
+}
