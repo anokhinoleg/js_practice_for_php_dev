@@ -22,18 +22,21 @@ console.log(copyarr1);
 console.log(arr1);*/
 
 
-let foods = new WeakMap();
+// let foods = new WeakMap();
+//
+// foods.set(['italian'], 'gelato');
+// foods.set(['mexican'], 'torta');
+// foods.set(['canadian'], 'poutine');
+//
+// let southern = ['Taxas', 'Tennesse', 'Kentucky'];
+// foods.set(southern, 'hot chicken');
 
-foods.set(['italian'], 'gelato');
-foods.set(['mexican'], 'torta');
-foods.set(['canadian'], 'poutine');
+// console.log(
+//     foods.get(['italian']),
+//     foods.has('french'),
+//     foods.get(southern),
+//     foods.size
+// );
 
-let southern = ['Taxas', 'Tennesse', 'Kentucky'];
-foods.set(southern, 'hot chicken');
-
-console.log(
-    foods.get(['italian']),
-    foods.has('french'),
-    foods.get(southern),
-    foods.size
-);
+let foods = require('./foods.js');
+console.log(foods);
