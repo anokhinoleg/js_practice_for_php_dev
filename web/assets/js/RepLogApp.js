@@ -1,6 +1,8 @@
 'use strict';
 const Helper = require('./RepLogAppHelper');
-(function(window, $, Routing, swal) {
+const $ = require('jquery');
+
+(function(window, Routing, swal) {
     let HelperInstance = new WeakMap();
     class RepLogApp {
         constructor($wrapper) {
@@ -106,8 +108,8 @@ const Helper = require('./RepLogAppHelper');
             e.preventDefault();
             const $link = $(e.currentTarget);
             swal({
-                title: 'Are you sure?',
-                text: 'You will not be able to recover this imaginary file!',
+                title: 'Delete this log?',
+                text: 'You will not be able to recover this log!',
                 type: 'warning',
                 showCancelButton: true,
                 showLoaderOnConfirm: true,
@@ -191,4 +193,4 @@ const Helper = require('./RepLogAppHelper');
         `;
     window.RepLogApp = RepLogApp;
 
-})(window, jQuery, Routing, swal);
+})(window, Routing, swal);
