@@ -1,8 +1,9 @@
 'use strict';
 const Helper = require('./RepLogAppHelper');
 const $ = require('jquery');
+const swal = require('sweetalert2');
 
-(function(window, Routing, swal) {
+(function(window, Routing) {
     let HelperInstance = new WeakMap();
     class RepLogApp {
         constructor($wrapper) {
@@ -193,4 +194,4 @@ const $ = require('jquery');
         `;
     window.RepLogApp = RepLogApp;
 
-})(window, Routing, swal);
+})(window, Routing);
