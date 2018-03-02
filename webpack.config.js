@@ -1,5 +1,5 @@
 const path = require('path');
-
+const webpack = require('webpack');
 module.exports = {
     entry: {
         rep_log: './web/assets/js/rep_log.js',
@@ -9,5 +9,21 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, "web", "build"),
         filename: "[name].js"
-    }
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                use: {
+                    loader: "babel-loader"
+                }
+            }
+        ]
+    },
+    plugins: [
+        new webpack.ProvidePlugin({
+            jQuery: 'jquery',
+            $: 'jquery'
+        })
+    ]
 }
