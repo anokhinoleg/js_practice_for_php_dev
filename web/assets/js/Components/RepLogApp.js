@@ -2,6 +2,7 @@
 const Helper = require('./RepLogAppHelper');
 const $ = require('jquery');
 const swal = require('sweetalert2');
+require('sweetalert2/dist/sweetalert2.css');
 
 let HelperInstance = new WeakMap();
 class RepLogApp {
