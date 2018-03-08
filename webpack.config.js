@@ -8,7 +8,8 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, "web", "build"),
-        filename: "[name].js"
+        filename: "[name].js",
+        publicPath: "/build/"
     },
     module: {
         rules: [
@@ -26,6 +27,13 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [ 'style-loader', 'css-loader' ]
+            },
+
+            {
+                test: /\.(png|svg|jpg|gif|jpeg|ico)$/,
+                use: [
+                    'file-loader'
+                ]
             }
         ]
     },

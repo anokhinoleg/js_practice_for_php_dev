@@ -12,6 +12,7 @@
     "babel-preset-env": "^1.6.1",
     "bootstrap": "3.3.7",
     "css-loader": "^0.28.10",
+    "file-loader": "^1.1.11",
     "jquery": "^3.3.1",
     "style-loader": "^0.20.2",
     "sweetalert2": "^7.12.12",
