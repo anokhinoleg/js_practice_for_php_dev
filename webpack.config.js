@@ -26,14 +26,30 @@ module.exports = {
 
             {
                 test: /\.css$/,
-                use: [ 'style-loader', 'css-loader' ]
+                use: [
+                    'style-loader',
+                    'css-loader'
+                ]
             },
 
             {
                 test: /\.(png|svg|jpg|gif|jpeg|ico)$/,
-                use: [
-                    'file-loader'
-                ]
+                use: {
+                    loader: "file-loader",
+                    options: {
+                        name: '[name]-[hash:6].[ext]'
+                    }
+                }
+            },
+
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/,
+                use: {
+                    loader: "file-loader",
+                    options: {
+                        name: '[name]-[hash:6].[ext]'
+                    }
+                }
             }
         ]
     },
