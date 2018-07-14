@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block body %}
     <div class="row">
-        <div class="col-md-7 js-rep-log-table">
+        <div class="col-md-7 js-rep-log-table" data-rep-logs="{{ repLogsJson|e('html_attr') }}">
             <h2>
                 Lift History
                 <a href="#list-stuff-form" class="btn btn-md btn-success pull-right">
@@ -35,7 +35,12 @@
         </div>
         <div class="col-md-5">
             <div class="leaderboard">
-                <h2 class="text-center"><img class="dumbbell" src="{{ asset('build/static/dumbbell.png') }}">Leaderboard</h2>
+                <h2 class="text-center js-custom-popover"
+                    data-toggle="popover"
+                    title="About the Leaderboard"
+                    data-content="Want to be a leader? Lift stuff"
+                >
+                    <img class="dumbbell" src="{{ asset('build/static/dumbbell.png') }}">Leaderboard</h2>
                 {{ include('lift/_leaderboard.html.twig') }}
             </div>
         </div>
@@ -44,4 +49,12 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('build/rep_log.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.js-custom-popover').popover({
+                trigger: 'hover',
+                placement: 'left'
+            })
+        })
+    </script>
 {% endblock %}

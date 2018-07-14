@@ -36,11 +36,13 @@ class LiftController extends BaseController
             $totalWeight += $repLog->getTotalWeightLifted();
         }
         // render just the form for AJAX, there is a validation error
-
-
+        $repLogModels = $this->findAllUsersRepLogModels();
+        $repLogsJson = $this->get('serializer')
+            ->serialize($repLogModels, 'json');
         return $this->render('lift/index.html.twig', array(
             'form' => $form->createView(),
-            'leaderboard' => $this->getLeaders()
+            'leaderboard' => $this->getLeaders(),
+            'repLogsJson' => $repLogsJson
         ));
     }
     /**

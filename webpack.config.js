@@ -2,6 +2,34 @@ const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+const styleLoader = {
+    loader: 'style-loader',
+    options: {
+        sourceMap: true
+    }
+};
+
+const cssLoader = {
+    loader: 'css-loader',
+    options: {
+        sourceMap: true
+    }
+};
+
+const sassLoader = {
+    loader: 'sass-loader',
+    options: {
+        sourceMap: true
+    }
+};
+
+const resolveUrlLoader = {
+    loader: 'resolve-url-loader',
+    options: {
+        sourceMap: true
+    }
+};
+
 module.exports = {
     entry: {
         rep_log: './assets/js/rep_log.js',
@@ -29,16 +57,17 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    'style-loader',
-                    'css-loader'
+                    styleLoader,
+                    cssLoader
                 ]
             },
             {
                 test: /\.scss$/,
                 use: [
-                    'style-loader',
-                    'css-loader',
-                    'sass-loader'
+                    styleLoader,
+                    cssLoader,
+                    resolveUrlLoader,
+                    sassLoader
                 ]
             },
             {
@@ -65,10 +94,13 @@ module.exports = {
     plugins: [
         new webpack.ProvidePlugin({
             jQuery: 'jquery',
-            $: 'jquery'
+            $: 'jquery',
+            'widnow.jQuery': 'jquery',
+            'window.$': 'jquery'
         }),
         new CopyWebpackPlugin([
             { from: './assets/static', to: 'static' }
         ])
-    ]
+    ],
+    devtool: "inline-source-map"
 }
