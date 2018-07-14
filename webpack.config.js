@@ -100,7 +100,14 @@ module.exports = {
         }),
         new CopyWebpackPlugin([
             { from: './assets/static', to: 'static' }
-        ])
+        ]),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: [
+                'layout',
+                'manifest'
+            ],
+            minChunks: Infinity
+        })
     ],
     devtool: "inline-source-map"
 }
