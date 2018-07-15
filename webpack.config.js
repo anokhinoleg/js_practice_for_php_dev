@@ -1,18 +1,25 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
+
+const useDevServer = false;
+const publicPath = useDevServer ? 'http://localhost:8080/build' : '/build/';
+const isProduction = process.env.NODE_ENV === 'production'
+const useSourceMaps = !isProduction;
 
 const styleLoader = {
     loader: 'style-loader',
     options: {
-        sourceMap: true
+        sourceMap: useSourceMaps
     }
 };
 
 const cssLoader = {
     loader: 'css-loader',
     options: {
-        sourceMap: true
+        sourceMap: useSourceMaps,
+        minimize: isProduction
     }
 };
 
@@ -26,14 +33,11 @@ const sassLoader = {
 const resolveUrlLoader = {
     loader: 'resolve-url-loader',
     options: {
-        sourceMap: true
+        sourceMap: useSourceMaps
     }
 };
 
-const useDevServer = true;
-const publicPath = useDevServer ? 'http://localhost:8080/build' : '/build/';
-
-module.exports = {
+const webpackConfig = {
     entry: {
         rep_log: './assets/js/rep_log.js',
         login: './assets/js/login.js',
@@ -59,19 +63,23 @@ module.exports = {
 
             {
                 test: /\.css$/,
-                use: [
-                    styleLoader,
-                    cssLoader
-                ]
+                use: ExtractTextWebpackPlugin.extract({
+                    use: [
+                        cssLoader,
+                    ],
+                    fallback: styleLoader
+                })
             },
             {
                 test: /\.scss$/,
-                use: [
-                    styleLoader,
-                    cssLoader,
-                    resolveUrlLoader,
-                    sassLoader
-                ]
+                use: ExtractTextWebpackPlugin.extract({
+                    use: [
+                        cssLoader,
+                        resolveUrlLoader,
+                        sassLoader
+                    ],
+                    fallback: styleLoader
+                })
             },
             {
                 test: /\.(png|svg|jpg|gif|jpeg|ico)$/,
@@ -110,11 +118,29 @@ module.exports = {
                 'manifest'
             ],
             minChunks: Infinity
-        })
+        }),
+        new ExtractTextWebpackPlugin('[name].css')
     ],
-    devtool: 'inline-source-map',
+    devtool: useSourceMaps ? 'inline-source-map' : false,
     devServer: {
         contentBase: './web',
         headers: { 'Access-Control-Allow-Origin': '*' }
     }
+};
+if (isProduction) {
+    webpackConfig.plugins.push(
+        new webpack.optimize.UglifyJsPlugin()
+    );
+    webpackConfig.plugins.push(
+        new webpack.LoaderOptionsPlugin({
+            minimize: true,
+            debugId: false
+        })
+    );
+    webpackConfig.plugins.push(
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV' : JSON.stringify('production')
+        })
+    )
 }
+module.exports = webpackConfig;

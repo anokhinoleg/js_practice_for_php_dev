@@ -58,3 +58,7 @@
         })
     </script>
 {% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('build/rep_log.css') }}">
+{% endblock %}
