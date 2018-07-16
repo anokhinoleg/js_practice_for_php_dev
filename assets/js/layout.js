@@ -3,7 +3,8 @@
 import $ from 'jquery';
 import 'bootstrap-sass';
 import '../css/main.scss';
-import 'babel-polyfill';
+
+import 'core-js/library/es6/promise';
 
 $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
